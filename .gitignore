@@ -6,3 +6,4 @@ _build
 csv_command_line/.vscode/ipch
 tools/csv_command_line/.vscode/ipch
 _mac
+build/

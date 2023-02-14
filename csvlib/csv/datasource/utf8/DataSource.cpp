@@ -90,7 +90,7 @@ namespace utf8 {
 			_in.clear();   //  Since ignore will have set eof.
 			_in.seekg( 0, std::ios_base::beg );
 
-			if (_length < _BOMS_SIZE) {
+			if (_length < (int)_BOMS_SIZE) {
 				// If we have less chars in the file than the size of the BOM.
 				return true;
 			}
@@ -112,6 +112,11 @@ namespace utf8 {
 	double FileDataSource::progress() {
 		double pos = _in.tellg();
 		double len = _length;
+		[[unlikely]]
+		if(pos < 0){
+			// pos can be -1, since tellg can return that at the end!
+			return 1.0;
+		}
 		return std::min(pos / len, 1.0);
 	}
 
