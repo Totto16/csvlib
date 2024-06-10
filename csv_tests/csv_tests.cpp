@@ -402,6 +402,26 @@ TEST(CSVTests, Separator) {
   checkRowIndexes(records);
 }
 
+TEST(CSVTests, FileSeparatorTSV) {
+  csv::utf8::FileDataSource input;
+  input.separator = '\t';
+
+  const auto url = getResource("title.basics.tsv");
+  ASSERT_FALSE(url.empty());
+
+  ASSERT_TRUE(input.open(url.c_str()));
+  std::vector<csv::record> records = AddRecords(input);
+
+  ASSERT_EQ(14, records.size());
+
+  for (std::size_t i = 0; i < records.size(); ++i) {
+    ASSERT_EQ(9, records[i].size());
+  }
+
+  // Check that the row values match.  This
+  checkRowIndexes(records);
+}
+
 TEST(CSVTests, LastCharacterIsASeparator) {
   csv::utf8::StringDataSource input;
   input.separator = '\t';
