@@ -604,6 +604,41 @@ TEST(CSVTests, QuoteAtEndOfLineAndFile) {
   ASSERT_EQ(5, records[2].size());
 }
 
+TEST(CSVTests, QuoteAtEndOfLineAndFileCorrect) {
+  csv::utf8::StringDataSource input;
+  ASSERT_TRUE(input.set(",,a,,\n,,b,,\n,,c,,\"valid quote, hey\""));
+  std::vector<csv::record> records = AddRecords(input);
+
+  ASSERT_EQ(3, records.size());
+  ASSERT_EQ(5, records[0].size());
+  ASSERT_EQ(5, records[1].size());
+  ASSERT_EQ(5, records[2].size());
+  ASSERT_EQ(records[2].content[4].content, "valid quote, hey");
+}
+
+TEST(CSVTests, InvalidQuoteNotClosing) {
+  csv::utf8::StringDataSource input;
+  ASSERT_TRUE(input.set("\"invalid quote, not closing"));
+  std::vector<csv::record> records = AddRecords(input);
+
+  ASSERT_EQ(1, records.size());
+  ASSERT_EQ(1, records[0].size());
+  ASSERT_EQ(records[0].content[0].content, "invalid quote, not closing");
+}
+
+TEST(CSVTests, InvalidQuoteNotUntilEnd) {
+  csv::utf8::StringDataSource input;
+  ASSERT_TRUE(input.set("\"invalid quote, not going to the end\" since here we "
+                        "have another thing,,"));
+  std::vector<csv::record> records = AddRecords(input);
+
+  ASSERT_EQ(1, records.size());
+  ASSERT_EQ(3, records[0].size());
+  ASSERT_EQ(records[0].content[0].content,
+            "invalid quote, not going to the end");
+  ASSERT_EQ(records[0].content[1].content, "");
+}
+
 TEST(CSVTests, Exception) {
   bool caught = false;
 
