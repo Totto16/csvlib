@@ -115,7 +115,7 @@ TEST(CSVTests, Example) {
   const auto url = getResource("orig.csv");
   ASSERT_FALSE(url.empty()) << "URl: '" << url << "'\n";
 
-  ASSERT_TRUE(input.open(url.c_str()));
+  ASSERT_TRUE(input.open(url));
 
   std::vector<csv::record> records = AddRecords(input);
   ASSERT_EQ(8, records.size());
@@ -141,7 +141,7 @@ TEST(CSVTests, Exceptions) {
   const auto url = getResource("orig.csv");
   ASSERT_FALSE(url.empty());
 
-  ASSERT_NO_THROW(csv::utf8::FileDataSource{url.c_str()});
+  ASSERT_NO_THROW(csv::utf8::FileDataSource{url});
 
 #ifdef ALLOW_ICU_EXTENSIONS
 
@@ -319,7 +319,7 @@ TEST(CSVTests, UTF8BOMRemoval) {
   const auto url = getResource("simple_csv_utf8_bom.tsv");
   ASSERT_FALSE(url.empty());
 
-  ASSERT_TRUE(parser.open(url.c_str()));
+  ASSERT_TRUE(parser.open(url));
 
   records = AddRecords(parser);
   ASSERT_EQ(1, records.size());
@@ -409,7 +409,7 @@ TEST(CSVTests, FileSeparatorTSV) {
   const auto url = getResource("title.basics.tsv");
   ASSERT_FALSE(url.empty());
 
-  ASSERT_TRUE(input.open(url.c_str()));
+  ASSERT_TRUE(input.open(url));
   std::vector<csv::record> records = AddRecords(input);
 
   ASSERT_EQ(14, records.size());
@@ -505,7 +505,7 @@ TEST(CSVTests, FileWithBlankLinesAndLineEndingsInQuotedStrings) {
   const auto url = getResource("classification.csv");
   ASSERT_FALSE(url.empty());
 
-  ASSERT_TRUE(input.open(url.c_str()));
+  ASSERT_TRUE(input.open(url));
 
   std::vector<csv::record> records = AddRecords(input);
   ASSERT_EQ(10, records.size());
@@ -517,7 +517,7 @@ TEST(CSVTests, FileWithBlankLinesAndLineEndingsInQuotedStrings) {
   csv::utf8::FileDataSource input2;
   input2.skipBlankLines = false;
 
-  ASSERT_TRUE(input2.open(url.c_str()));
+  ASSERT_TRUE(input2.open(url));
 
   records = AddRecords(input2);
   ASSERT_EQ(29, records.size());
