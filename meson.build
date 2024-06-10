@@ -18,9 +18,12 @@ inc_dirs = []
 
 subdir('csvlib')
 
-
 csvlib_dep = declare_dependency(
     include_directories: inc_dirs,
     version: meson.project_version(),
     link_with: csvlib_lib,
 )
+
+if get_option('tests')
+    subdir('csv_tests')
+endif
