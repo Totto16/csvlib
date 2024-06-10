@@ -47,8 +47,14 @@ std::vector<csv::record> AddRecords(const std::string &str) {
 }
 
 std::string getResource(const char *name) {
+#define STRINGIFY(a) STRINGIFY_HELPER_(a)
+#define STRINGIFY_HELPER_(a) #a
 
-  const auto path = std::filesystem::path{"./resources"} / name;
+  const auto path =
+      std::filesystem::path{STRINGIFY(_TEST_RESOURCE_PATH)} / name;
+
+#undef STRINGIFY
+#undef STRINGIFY_HELPER_
 
   if (!std::filesystem::exists(path)) {
     return "";
@@ -107,7 +113,7 @@ TEST(CSVTests, Example) {
   csv::utf8::FileDataSource input;
 
   const auto url = getResource("orig.csv");
-  ASSERT_FALSE(url.empty());
+  ASSERT_FALSE(url.empty()) << "URl: '" << url << "'\n";
 
   ASSERT_TRUE(input.open(url.c_str()));
 
@@ -122,7 +128,7 @@ TEST(CSVTests, Example) {
 
 TEST(CSVTests, Exceptions) {
   // Invalid filename
-  ASSERT_THROW(csv::utf8::FileDataSource("caterpillar"), std::runtime_error);
+  ASSERT_THROW(csv::utf8::FileDataSource("caterpillar"), csv::file_exception);
 
 #ifdef ALLOW_ICU_EXTENSIONS
 

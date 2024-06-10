@@ -9,8 +9,10 @@ csv_tests = executable(
     'csv_tests',
     test_src_files,
     dependencies: test_deps,
+    cpp_args: [
+        '-D_TEST_RESOURCE_PATH='
+        + meson.project_source_root() / 'csv_tests' / 'resources',
+    ],
 )
-
-subdir('resources')
 
 test('csv_tests', csv_tests)
